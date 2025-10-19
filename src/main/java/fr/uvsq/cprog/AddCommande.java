@@ -3,21 +3,21 @@ package fr.uvsq.cprog;
 import fr.uvsq.cprog.collex.Dns;
 
 public class AddCommande implements Commande {
-    private final Dns dns;
-    private final String adresseIP;
-    private final String nomMachine;
+    private Dns dns;
+    private String ip;
+    private String nomQualifie;
 
-    public AddCommande(Dns dns, String adresseIP, String nomMachine) {
+    public AddCommande(Dns dns, String ip, String nomQualifie) {
         this.dns = dns;
-        this.adresseIP = adresseIP;
-        this.nomMachine = nomMachine;
+        this.ip = ip;
+        this.nomQualifie = nomQualifie;
     }
 
     @Override
     public void execute() {
         try {
-            dns.addItem(adresseIP, nomMachine);
-            System.out.println("Machine ajoutée avec succès !");
+            dns.addItem(ip, nomQualifie);
+            System.out.println("Machine ajoutée avec succès.");
         } catch (Exception e) {
             System.out.println("ERREUR : " + e.getMessage());
         }
