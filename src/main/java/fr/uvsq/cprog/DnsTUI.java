@@ -1,62 +1,72 @@
 package fr.uvsq.cprog;
 
-import java.util.Scanner;
 import fr.uvsq.cprog.collex.Dns;
 
+import java.util.Scanner;
+
 public class DnsTUI {
-    private final Scanner scanner;
+    private final Dns dns;
+    private final Scanner scanner = new Scanner(System.in);
 
-    public DnsTUI() {
-        scanner = new Scanner(System.in);
+    public DnsTUI(Dns dns) {
+        this.dns = dns;
     }
 
-    public String nextInput() {
+    public Commande nextCommande() {
         System.out.print("> ");
-        return scanner.nextLine().trim();
-    }
+        String ligne = scanner.nextLine().trim();
 
-    public void affiche(Object o) {
-        System.out.println(o);
-    }
-
-    public Commande nextCommande(Dns dns) {
-        String ligne = nextInput();
-        String[] parties = ligne.split("\\s+");
-
-        if (parties.length == 0 || parties[0].isEmpty()) {
-            return null;
+        if (ligne.equalsIgnoreCase("quit") || ligne.equalsIgnoreCase("exit")) {
+            return new QuitterCommande();
         }
 
-        String cmd = parties[0];
-
-        switch (cmd) {
-            case "rechercheip":
-                if (parties.length < 2) {
-                    affiche("ERREUR : il manque le nom de machine");
-                    return null;
-                }
-                return new RechercheIpCommande(dns, parties[1]);
-
-            case "add":
-                if (parties.length < 3) {
-                    affiche("ERREUR : syntaxe : add <adresse_ip> <nom_machine>");
-                    return null;
-                }
-                return new AddCommande(dns, parties[1], parties[2]);
-
-            case "quitter":
-                return new Commande() {
-                    @Override
-                    public void execute() {
-                        System.out.println("Au revoir !");
-                        System.exit(0);
-                    }
-                };
-
-            default:
-                affiche("Commande inconnue : " + cmd);
+        // add <ip> <nom.qualifie>
+        if (ligne.startsWith("add ")) {
+            String[] parts = ligne.split("\\s+");
+            if (parts.length == 3) {
+                String ip = parts[1];
+                String nom = parts[2];
+                return new AddCommande(dns, ip, nom);
+            } else {
+                System.out.println("Commande 'add' mal formée. Usage: add <ip> <nom.qualifie>");
                 return null;
+            }
         }
+
+        // ls [-a] <domaine>
+        if (ligne.startsWith("ls")) {
+            String[] parts = ligne.split("\\s+");
+            boolean triParIp = false;
+            String domaine = null;
+
+            if (parts.length == 2) {
+                domaine = parts[1];
+            } else if (parts.length == 3 && parts[1].equals("-a")) {
+                triParIp = true;
+                domaine = parts[2];
+            } else {
+                System.out.println("Commande 'ls' mal formée. Usage: ls [-a] <domaine>");
+                return null;
+            }
+
+            return new LsCommande(dns, domaine, triParIp);
+        }
+
+        // Si ligne est une adresse IP (simple regex)
+        if (ligne.matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
+            return new RechercheNomCommande(dns, ligne);
+        }
+
+        // Sinon on considère que c'est un nom qualifié
+        if (ligne.contains(".")) {
+            return new RechercheIpCommande(dns, ligne);
+        }
+
+        System.out.println("Commande inconnue.");
+        return null;
+    }
+
+    public void affiche(String message) {
+        System.out.println(message);
     }
 }
-
