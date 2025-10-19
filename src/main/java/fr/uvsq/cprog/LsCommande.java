@@ -3,7 +3,6 @@ package fr.uvsq.cprog;
 import fr.uvsq.cprog.collex.Dns;
 import fr.uvsq.cprog.collex.DnsItem;
 
-import java.util.Comparator;
 import java.util.List;
 
 public class LsCommande implements Commande {
@@ -19,12 +18,7 @@ public class LsCommande implements Commande {
 
     @Override
     public void execute() {
-        List<DnsItem> items = dns.getItems(domaine);
-        if (triParIp) {
-            items.sort(Comparator.comparing(DnsItem::getAdresseIP));
-        } else {
-            items.sort(Comparator.comparing(DnsItem::getNom));
-        }
+        List<DnsItem> items = dns.getItemsParDomaine(domaine, triParIp);
 
         for (DnsItem item : items) {
             System.out.println(item.getAdresseIP() + " " + item.getNom());
