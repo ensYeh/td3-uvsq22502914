@@ -1,25 +1,23 @@
 package fr.uvsq.cprog;
 
 import fr.uvsq.cprog.collex.Dns;
+import fr.uvsq.cprog.collex.NomMachine;
+import fr.uvsq.cprog.collex.AdresseIP;
 
 public class AddCommande implements Commande {
-    private Dns dns;
-    private String ip;
-    private String nomQualifie;
+    private final Dns dns;
+    private final NomMachine nom;
+    private final AdresseIP ip;
 
-    public AddCommande(Dns dns, String ip, String nomQualifie) {
+    public AddCommande(Dns dns, NomMachine nom, AdresseIP ip) {
         this.dns = dns;
+        this.nom = nom;
         this.ip = ip;
-        this.nomQualifie = nomQualifie;
     }
 
     @Override
     public void execute() {
-        try {
-            dns.addItem(ip, nomQualifie);
-            System.out.println("Machine ajoutée avec succès.");
-        } catch (Exception e) {
-            System.out.println("ERREUR : " + e.getMessage());
-        }
+        dns.add(nom, ip);
+        System.out.println("Ajouté : " + nom + " -> " + ip);
     }
 }

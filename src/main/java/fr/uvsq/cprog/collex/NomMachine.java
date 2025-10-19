@@ -2,23 +2,14 @@ package fr.uvsq.cprog.collex;
 
 import java.util.Objects;
 
-public class NomMachine {
+public class NomMachine implements Comparable<NomMachine> {
     private final String nom;
 
     public NomMachine(String nom) {
-        if (!isValidNom(nom)) {
-            throw new IllegalArgumentException("Nom de machine invalide : " + nom);
+        if (nom == null || nom.isEmpty()) {
+            throw new IllegalArgumentException("Nom de machine invalide");
         }
         this.nom = nom;
-    }
-
-    private boolean isValidNom(String nom) {
-        // Exemple simple : le nom doit contenir au moins un point (domaine)
-        // et ne pas être vide.
-        if (nom == null || nom.isEmpty()) return false;
-        if (!nom.contains(".")) return false;
-        // On peut ajouter d'autres vérifications si besoin
-        return true;
     }
 
     @Override
@@ -37,5 +28,10 @@ public class NomMachine {
     @Override
     public int hashCode() {
         return Objects.hash(nom);
+    }
+
+    @Override
+    public int compareTo(NomMachine other) {
+        return this.nom.compareTo(other.nom);
     }
 }

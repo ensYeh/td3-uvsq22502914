@@ -1,24 +1,25 @@
 package fr.uvsq.cprog;
 
 import fr.uvsq.cprog.collex.Dns;
-import fr.uvsq.cprog.collex.DnsItem;
+import fr.uvsq.cprog.collex.NomMachine;
+import fr.uvsq.cprog.collex.AdresseIP;
 
 public class RechercheNomCommande implements Commande {
     private final Dns dns;
-    private final String adresseIP;
+    private final AdresseIP ip;
 
-    public RechercheNomCommande(Dns dns, String adresseIP) {
+    public RechercheNomCommande(Dns dns, AdresseIP ip) {
         this.dns = dns;
-        this.adresseIP = adresseIP;
+        this.ip = ip;
     }
 
     @Override
     public void execute() {
-        DnsItem item = dns.getItemParIP(adresseIP);
-        if (item != null) {
-            System.out.println(item.getNom());
+        NomMachine nom = dns.getNomParIp(ip);
+        if (nom != null) {
+            System.out.println(nom);
         } else {
-            System.out.println("ERREUR : Adresse IP inconnue");
+            System.out.println("Adresse IP non trouvée : " + ip);
         }
     }
 }

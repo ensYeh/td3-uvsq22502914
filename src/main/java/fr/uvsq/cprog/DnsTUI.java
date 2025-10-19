@@ -1,6 +1,8 @@
 package fr.uvsq.cprog;
 
 import fr.uvsq.cprog.collex.Dns;
+import fr.uvsq.cprog.collex.NomMachine;
+import fr.uvsq.cprog.collex.AdresseIP;
 
 import java.util.Scanner;
 
@@ -16,6 +18,7 @@ public class DnsTUI {
         System.out.print("> ");
         String ligne = scanner.nextLine().trim();
 
+        // Quitter
         if (ligne.equalsIgnoreCase("quit") || ligne.equalsIgnoreCase("exit")) {
             return new QuitterCommande();
         }
@@ -24,9 +27,14 @@ public class DnsTUI {
         if (ligne.startsWith("add ")) {
             String[] parts = ligne.split("\\s+");
             if (parts.length == 3) {
-                String ip = parts[1];
-                String nom = parts[2];
-                return new AddCommande(dns, ip, nom);
+                try {
+                    AdresseIP ip = new AdresseIP(parts[1]);
+                    NomMachine nom = new NomMachine(parts[2]);
+                    return new AddCommande(dns, nom, ip);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Adresse IP ou NomMachine invalide.");
+                    return null;
+                }
             } else {
                 System.out.println("Commande 'add' mal formée. Usage: add <ip> <nom.qualifie>");
                 return null;
@@ -37,7 +45,7 @@ public class DnsTUI {
         if (ligne.startsWith("ls")) {
             String[] parts = ligne.split("\\s+");
             boolean triParIp = false;
-            String domaine = null;
+            String domaine;
 
             if (parts.length == 2) {
                 domaine = parts[1];
@@ -52,14 +60,26 @@ public class DnsTUI {
             return new LsCommande(dns, domaine, triParIp);
         }
 
-        // Si ligne est une adresse IP (simple regex)
+        // Recherche nom par IP
         if (ligne.matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
-            return new RechercheNomCommande(dns, ligne);
+            try {
+                AdresseIP ip = new AdresseIP(ligne);
+                return new RechercheNomCommande(dns, ip);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Adresse IP invalide.");
+                return null;
+            }
         }
 
-        // Sinon on considère que c'est un nom qualifié
+        // Recherche IP par nom
         if (ligne.contains(".")) {
-            return new RechercheIpCommande(dns, ligne);
+            try {
+                NomMachine nom = new NomMachine(ligne);
+                return new RechercheIpCommande(dns, nom);
+            } catch (IllegalArgumentException e) {
+                System.out.println("NomMachine invalide.");
+                return null;
+            }
         }
 
         System.out.println("Commande inconnue.");

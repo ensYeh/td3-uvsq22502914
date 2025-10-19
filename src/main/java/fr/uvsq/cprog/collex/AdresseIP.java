@@ -2,29 +2,14 @@ package fr.uvsq.cprog.collex;
 
 import java.util.Objects;
 
-public class AdresseIP {
+public class AdresseIP implements Comparable<AdresseIP> {
     private final String ip;
 
     public AdresseIP(String ip) {
-        if (!isValidIP(ip)) {
-            throw new IllegalArgumentException("Adresse IP invalide : " + ip);
+        if (!ip.matches("\\d+\\.\\d+\\.\\d+\\.\\d+")) {
+            throw new IllegalArgumentException("Adresse IP invalide");
         }
         this.ip = ip;
-    }
-
-    private boolean isValidIP(String ip) {
-        // Vérifie le format simple d'une IPv4
-        String[] parts = ip.split("\\.");
-        if (parts.length != 4) return false;
-        for (String part : parts) {
-            try {
-                int num = Integer.parseInt(part);
-                if (num < 0 || num > 255) return false;
-            } catch (NumberFormatException e) {
-                return false;
-            }
-        }
-        return true;
     }
 
     @Override
@@ -36,13 +21,17 @@ public class AdresseIP {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AdresseIP)) return false;
-        AdresseIP adresseIP = (AdresseIP) o;
-        return ip.equals(adresseIP.ip);
+        AdresseIP that = (AdresseIP) o;
+        return ip.equals(that.ip);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(ip);
     }
-}
 
+    @Override
+    public int compareTo(AdresseIP other) {
+        return this.ip.compareTo(other.ip);
+    }
+}

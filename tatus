@@ -1,0 +1,19 @@
+[33mcecef3c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Finalisation de l'interface en ligne de commande avec toutes les commandes supportées
+[33m2bb7ba1[m Ajout de la commande QuitterCommande pour quitter l'application proprement
+[33m8040281[m Ajout de la commande AddCommande pour ajouter une machine au DNS
+[33m1a06dc5[m Utilisation de getItemsParDomaine dans LsCommande avec gestion du tri
+[33m6caeb7f[m Ajout de la commande LsCommande pour afficher la liste des machines d'un domaine
+[33mbadc155[m Ajout de la commande RechercheNomCommande pour obtenir le nom qualifié à partir d'une IP
+[33m1da7172[m Ajout de la classe Dns avec gestion du fichier, recherche par nom/IP, liste domaine, ajout avec mise à jour fichier
+[33m1fbf2d7[m Ajout de la classe DnsItem avec equals, hashCode et toString
+[33ma066850[m Ajout de la classe NomMachine avec validation, equals et hashCode
+[33m593464a[m Ajout de la classe AdresseIP avec validation, equals et hashCode
+[33m4a5f958[m Implémentation des commandes rechercheip, add et quitter dans DnsTUI, test OK
+[33m190e638[m Ajout de la commande AddCommande pour ajouter une machine au DNS
+[33mc0f2a38[m Implémentation de la gestion des commandes dans DnsTUI avec nextCommande
+[33mdd5da76[m Ajout de la classe DnsTUI (lecture des commandes et affichage)
+[33ma056cd8[m Ajout classe DnsItem avec adresseIP et nomMachine, equals et toString
+[33m49568f4[m Ajout classe NomMachine avec validation, getters et equals/hashCode
+[33mf8863b3[m Ajout classe AdresseIP avec validation, equals, hashCode et compareTo
+[33mdfe6f0e[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m add deadline
+[33mefb8e44[m Initial commit
