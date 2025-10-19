@@ -2,12 +2,7 @@ package fr.uvsq.cprog;
 
 import java.util.Scanner;
 import fr.uvsq.cprog.collex.Dns;
-import fr.uvsq.cprog.Commande;
-import fr.uvsq.cprog.RechercheIpCommande;
 
-/**
- * Classe pour interagir avec l'utilisateur (TUI = Text User Interface).
- */
 public class DnsTUI {
     private final Scanner scanner;
 
@@ -15,28 +10,15 @@ public class DnsTUI {
         scanner = new Scanner(System.in);
     }
 
-    /**
-     * Lit la prochaine commande tapée par l'utilisateur.
-     * @return la ligne de commande saisie (trimée)
-     */
     public String nextInput() {
         System.out.print("> ");
         return scanner.nextLine().trim();
     }
 
-    /**
-     * Afficher un message à l'utilisateur.
-     * @param o l'objet à afficher
-     */
     public void affiche(Object o) {
         System.out.println(o);
     }
 
-    /**
-     * Analyse la ligne de commande et renvoie la commande correspondante.
-     * @param dns l'objet Dns pour manipuler les entrées DNS
-     * @return une instance de Commande ou null si commande invalide
-     */
     public Commande nextCommande(Dns dns) {
         String ligne = nextInput();
         String[] parties = ligne.split("\\s+");
@@ -46,6 +28,7 @@ public class DnsTUI {
         }
 
         String cmd = parties[0];
+
         switch (cmd) {
             case "rechercheip":
                 if (parties.length < 2) {
@@ -53,6 +36,13 @@ public class DnsTUI {
                     return null;
                 }
                 return new RechercheIpCommande(dns, parties[1]);
+
+            case "add":
+                if (parties.length < 3) {
+                    affiche("ERREUR : syntaxe : add <adresse_ip> <nom_machine>");
+                    return null;
+                }
+                return new AddCommande(dns, parties[1], parties[2]);
 
             case "quitter":
                 return new Commande() {
@@ -69,3 +59,4 @@ public class DnsTUI {
         }
     }
 }
+
